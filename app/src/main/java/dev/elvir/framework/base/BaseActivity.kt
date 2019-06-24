@@ -8,12 +8,13 @@ import android.support.v7.app.AppCompatActivity
 import dev.elvir.framework.App
 import dev.elvir.framework.di.component.ActivityComponent
 import dev.elvir.framework.di.component.DaggerActivityComponent
+
 import dev.elvir.framework.di.module.ActivityModule
 
 
 abstract class BaseActivity<out T : ViewDataBinding, out V : BaseViewModel> : AppCompatActivity() {
     private lateinit var viewDataBinding: T
-    private lateinit var baseViewModel: V
+    private  var baseViewModel: V? = null
     private lateinit var activityComponent: ActivityComponent
 
 
@@ -28,14 +29,19 @@ abstract class BaseActivity<out T : ViewDataBinding, out V : BaseViewModel> : Ap
 
     abstract fun getBindingVariable(): Int
 
+
+
      @LayoutRes
     abstract fun getLayoutId(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDependencyInjection()
+        inject()
         super.onCreate(savedInstanceState)
         performDataBinding()
     }
+
+    abstract fun inject()
 
     fun performDependencyInjection() {
         activityComponent = DaggerActivityComponent.builder()
@@ -46,8 +52,7 @@ abstract class BaseActivity<out T : ViewDataBinding, out V : BaseViewModel> : Ap
 
     fun performDataBinding() {
         viewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
-//        this.baseViewModel = if (baseViewModel == null) getBaseViewModel() else baseViewModel
-        baseViewModel = getBaseViewModel()
+        this.baseViewModel = if (baseViewModel == null) getBaseViewModel() else baseViewModel
         viewDataBinding.setVariable(getBindingVariable(), baseViewModel)
         viewDataBinding.executePendingBindings()
 
