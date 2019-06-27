@@ -1,27 +1,30 @@
 package dev.elvir.framework
 
 import android.app.Application
-import dev.elvir.framework.di.component.AppComponent
-import dev.elvir.framework.di.component.DaggerAppComponent
-import dev.elvir.framework.di.module.AppModule
+import dev.elvir.core.di.component.CoreComponent
+import dev.elvir.core.di.component.DaggerCoreComponent
+import dev.elvir.core.di.module.AppModule
+import dev.elvir.core.di.provider.CoreComponentProvider
 
-class App:Application(){
-    private lateinit var appComponent:AppComponent
+class App : Application(), CoreComponentProvider {
+
+    private lateinit var coreComponent: CoreComponent
+
 
     override fun onCreate() {
         super.onCreate()
         setUpDagger()
     }
 
-    private fun  setUpDagger(){
-         appComponent = DaggerAppComponent.builder()
-             .appModule(AppModule(this))
-             .build()
-        appComponent.inject(this)
+    private fun setUpDagger() {
+        coreComponent = DaggerCoreComponent.builder()
+            .appModule(AppModule(this))
+            .build()
+        coreComponent.inject(this)
     }
 
-    public fun  getAppComponent():AppComponent {
-        return appComponent
+    override fun provideCoreComponent(): CoreComponent {
+        return coreComponent
     }
 
 }

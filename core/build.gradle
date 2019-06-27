@@ -1,21 +1,24 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
-
 android {
     compileSdkVersion 28
+
+
     defaultConfig {
-        applicationId "dev.elvir.framework"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -34,40 +37,34 @@ android {
     dataBinding {
         enabled = true
     }
+
 }
 
 dependencies {
-    def appDependencies = rootProject.ext.appDependencies
-    def appTestDependencies = rootProject.ext.appTestDependencies
+    def coreDependencies = rootProject.ext.coreDependencies
+    def coreTestDependencies = rootProject.ext.coreTestDependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
 
     // dependency injection
-    implementation appDependencies.javaxInject
-    implementation appDependencies.dagger
-    implementation appDependencies.daggerAndroid
-    implementation appDependencies.daggerAndroidSupport
-    kapt appDependencies.daggerAndroidProcessor
-    annotationProcessor appDependencies.daggerCompiler
-    kapt appDependencies.daggerCompiler
+    implementation coreDependencies.javaxInject
+    implementation coreDependencies.dagger
+    implementation coreDependencies.daggerAndroid
+    implementation coreDependencies.daggerAndroidSupport
+    kapt coreDependencies.daggerAndroidProcessor
+    annotationProcessor coreDependencies.daggerCompiler
+    kapt coreDependencies.daggerCompiler
     // reactive
-    implementation appDependencies.rxJava
-    implementation appDependencies.rxAndroid
-    implementation appDependencies.reactiveStreams
+    implementation coreDependencies.rxJava
+    implementation coreDependencies.rxAndroid
+    implementation coreDependencies.reactiveStreams
 
     //LifeCycle
-//    implementation appDependencies.lifecycleExtensions
-//    implementation appDependencies.lifecycleCommon
-//    implementation appDependencies.pagingRuntime
     implementation "android.arch.lifecycle:extensions:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
-    implementation project(path: ':core')
-    implementation project(path: ':domain')
-    implementation project(path: ':data')
-    implementation project(path: ':presentation')
 }

@@ -1,10 +1,10 @@
 package dev.elvir.framework
 
 import android.util.Log
-import dev.elvir.framework.base.BaseViewModel
+import dev.elvir.presentation.base.BaseViewModel
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor() : BaseViewModel() {
-    fun doSomething() =  Log.e("Infoooo","Okkkkk")
+    fun doSomething() = Log.e("Infoooo", "Okkkkk")
 
 }
